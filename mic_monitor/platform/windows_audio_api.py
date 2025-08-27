@@ -76,8 +76,8 @@ class WindowsAudioMonitor:
             '''
             
             result = subprocess.run(
-                ['powershell', '-ExecutionPolicy', 'Bypass', '-Command', powershell_script],
-                capture_output=True, text=True, timeout=5
+                ['powershell', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-Command', powershell_script],
+                capture_output=True, text=True, timeout=5, creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0 and result.stdout.strip():
