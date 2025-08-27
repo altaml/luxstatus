@@ -4,7 +4,8 @@ pillow>=9.5.0
 psutil>=5.9.0
 
 # Luxafor device support (optional but recommended)
-pyusb==1.2.1
+# Note: luxafor requires pyusb==1.0.0, so we use that version
+pyusb==1.0.0
 git+https://github.com/fmartingr/pyluxafor.git#egg=luxafor
 
 # Platform-specific dependencies

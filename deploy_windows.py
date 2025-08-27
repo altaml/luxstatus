@@ -133,13 +133,13 @@ def create_installer():
     print("\n📦 Creating Windows Installer...")
     print("=" * 60)
     
-    # Create Inno Setup script
-    inno_script = '''
+    # Create Inno Setup script (using raw string to avoid unicode escape issues)
+    inno_script = r'''
 [Setup]
 AppName=Microphone Status Monitor
 AppVersion=2.0
-AppPublisher=Your Company
-AppPublisherURL=https://github.com/yourusername/luxstatus
+AppPublisher=AltaML
+AppPublisherURL=https://github.com/altaml/luxstatus
 DefaultDirName={autopf}\MicrophoneStatusMonitor
 DefaultGroupName=Microphone Status Monitor
 UninstallDisplayIcon={app}\MicrophoneStatusMonitor.exe
@@ -178,7 +178,7 @@ Filename: "{app}\MicrophoneStatusMonitor.exe"; Description: "Launch Microphone S
 
 def create_batch_installer():
     """Create a simple batch file installer"""
-    batch_content = '''@echo off
+    batch_content = r'''@echo off
 title Microphone Status Monitor - Installation
 echo ===============================================
 echo   Microphone Status Monitor Installation
@@ -254,7 +254,7 @@ pause
 
 def create_uninstaller():
     """Create an uninstaller batch file"""
-    uninstall_content = '''@echo off
+    uninstall_content = r'''@echo off
 title Microphone Status Monitor - Uninstall
 echo ===============================================
 echo   Microphone Status Monitor Uninstallation
