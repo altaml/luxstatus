@@ -1,0 +1,112 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+ENV/
+env/
+luxafor_env/
+.venv/
+.env/
+
+# PyInstaller
+*.manifest
+*.spec
+*.exe
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Logs and Data
+*.log
+mic_logs/
+logs/
+*.csv
+port.txt
+temp/
+tmp/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Build artifacts
+installer/
+installer.iss
+install_*.bat
+uninstall_*.bat
+install_*.sh
+uninstall_*.sh
+*.dmg
+*.pkg
+*.app/
+*.plist
+
+# Docker
+Dockerfile
+Dockerfile.*
+docker-compose.yml
+docker-build.sh
+.dockerignore
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+coverage.xml
+*.pytest_cache
+
+# Documentation build
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# Temporary files
+*.bak
+*.tmp
+*.temp
+~*
+
+# Security
+*.key
+*.pem
+*.crt
+*.p12
+secrets.json
+config.local.json
