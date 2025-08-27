@@ -103,6 +103,15 @@ exe = EXE(
     subprocess.run([sys.executable, "-m", "PyInstaller", "mic_monitor.spec", "--clean"], check=True)
     
     print("\nExecutable created in: dist/MicrophoneStatusMonitor.exe")
+    
+    # Copy executable to root for easier installer access
+    import shutil
+    try:
+        shutil.copy2("dist/MicrophoneStatusMonitor.exe", "MicrophoneStatusMonitor.exe")
+        print("Copied executable to root directory for installer")
+    except Exception as e:
+        print(f"Warning: Could not copy to root directory: {e}")
+    
     return "dist/MicrophoneStatusMonitor.exe"
 
 def create_icon():
@@ -205,8 +214,24 @@ if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
 
 :: Copy files
 echo Copying files...
-copy /Y "dist\MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
-copy /Y "README.md" "%INSTALL_DIR%\" >nul
+
+:: Check if the executable exists in the current directory first
+if exist "MicrophoneStatusMonitor.exe" (
+    copy /Y "MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
+    echo Copied MicrophoneStatusMonitor.exe from current directory
+) else if exist "dist\MicrophoneStatusMonitor.exe" (
+    copy /Y "dist\MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
+    echo Copied MicrophoneStatusMonitor.exe from dist directory
+) else (
+    echo ERROR: MicrophoneStatusMonitor.exe not found!
+    echo Please ensure the executable is in the same directory as this installer.
+    pause
+    exit /b 1
+)
+
+if exist "README.md" (
+    copy /Y "README.md" "%INSTALL_DIR%\" >nul
+)
 
 :: Create start menu shortcut
 echo Creating shortcuts...
