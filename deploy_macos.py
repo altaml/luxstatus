@@ -22,40 +22,63 @@ def create_macos_app():
     # Create setup_mac.py for py2app
     setup_content = '''
 from setuptools import setup
+import sys
+import os
+
+# Add current directory to path for imports
+sys.path.insert(0, os.path.dirname(__file__))
 
 APP = ['secure_mic_monitor.py']
-DATA_FILES = ['mic_monitor']
+DATA_FILES = []
 OPTIONS = {
-    'argv_emulation': True,
+    'argv_emulation': False,
     'packages': [
         'mic_monitor',
         'pystray',
         'PIL',
         'psutil',
-        'flask',
         'tkinter',
-        'luxafor',
-        'pyusb',
-        'usb'
     ],
     'includes': [
         'mic_monitor.platform.macos',
-        'mic_monitor.devices.luxafor',
-        'mic_monitor.status_manager'
+        'mic_monitor.devices.luxafor', 
+        'mic_monitor.status_manager',
+        'threading',
+        'time',
+        'logging',
+        'datetime',
+        'subprocess',
+        'json',
+        'os',
+        'sys'
     ],
+    'excludes': [
+        'flask',
+        'jinja2',
+        'werkzeug',
+        'click',
+        'itsdangerous',
+        'markupsafe'
+    ],
+    'resources': [],
     'plist': {
         'CFBundleName': 'Microphone Status Monitor',
-        'CFBundleDisplayName': 'Microphone Status Monitor',
-        'CFBundleIdentifier': 'com.yourcompany.micmonitor',
+        'CFBundleDisplayName': 'Microphone Status Monitor', 
+        'CFBundleIdentifier': 'com.altaml.micmonitor',
         'CFBundleVersion': '2.0.0',
         'CFBundleShortVersionString': '2.0.0',
-        'LSUIElement': True,  # Hide from dock
+        'LSUIElement': True,
         'NSMicrophoneUsageDescription': 'This app monitors microphone usage to display your availability status.',
         'NSHighResolutionCapable': True,
-    }
+        'LSMinimumSystemVersion': '10.15.0'
+    },
+    'iconfile': None,
+    'strip': True,
+    'optimize': 2
 }
 
 setup(
+    name='Microphone Status Monitor',
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
@@ -68,7 +91,42 @@ setup(
     
     # Build the app
     print("\n🚀 Building app bundle with py2app...")
-    subprocess.run([sys.executable, "setup_mac.py", "py2app"], check=True)
+    try:
+        # Run py2app with verbose output for debugging
+        result = subprocess.run([sys.executable, "setup_mac.py", "py2app", "--verbose"], 
+                              capture_output=True, text=True, check=True)
+        print("Build successful!")
+    except subprocess.CalledProcessError as e:
+        print(f"Build failed with return code {e.returncode}")
+        print("STDOUT:", e.stdout)
+        print("STDERR:", e.stderr)
+        
+        # Try a simpler build without optional dependencies
+        print("\nTrying simplified build...")
+        simple_setup = '''
+from setuptools import setup
+
+APP = ['secure_mic_monitor.py']
+OPTIONS = {
+    'argv_emulation': False,
+    'packages': ['mic_monitor'],
+    'plist': {
+        'CFBundleName': 'Microphone Status Monitor',
+        'CFBundleIdentifier': 'com.altaml.micmonitor',
+        'LSUIElement': True,
+    }
+}
+
+setup(
+    app=APP,
+    options={'py2app': OPTIONS},
+    setup_requires=['py2app'],
+)
+'''
+        with open('setup_mac_simple.py', 'w') as f:
+            f.write(simple_setup)
+        
+        subprocess.run([sys.executable, "setup_mac_simple.py", "py2app"], check=True)
     
     print("\n✅ App bundle created in: dist/Microphone Status Monitor.app")
     return "dist/Microphone Status Monitor.app"

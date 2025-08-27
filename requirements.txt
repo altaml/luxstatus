@@ -12,3 +12,6 @@ git+https://github.com/fmartingr/pyluxafor.git#egg=luxafor
 pywin32>=304; sys_platform == "win32"
 pyobjc-core>=9.0; sys_platform == "darwin"
 pyobjc-framework-Cocoa>=9.0; sys_platform == "darwin"
+
+# Build tools (only install when needed)
+# py2app>=0.28; sys_platform == "darwin"
