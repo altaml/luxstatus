@@ -149,7 +149,7 @@ AppName=Microphone Status Monitor
 AppVersion=2.0
 AppPublisher=AltaML
 AppPublisherURL=https://github.com/altaml/luxstatus
-DefaultDirName={autopf}\MicrophoneStatusMonitor
+DefaultDirName={commonappdata}\AltaML\MicrophoneStatusMonitor
 DefaultGroupName=Microphone Status Monitor
 UninstallDisplayIcon={app}\MicrophoneStatusMonitor.exe
 OutputDir=installer
@@ -203,8 +203,8 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 
-:: Set installation directory
-set "INSTALL_DIR=%ProgramFiles%\MicrophoneStatusMonitor"
+:: Set installation directory (use ProgramData for system-wide access)
+set "INSTALL_DIR=%ProgramData%\AltaML\MicrophoneStatusMonitor"
 
 echo Installing to: %INSTALL_DIR%
 echo.
@@ -248,7 +248,8 @@ powershell -Command "$WshShell = New-Object -comObject WScript.Shell; $Shortcut 
 echo.
 set /p STARTUP="Add to Windows startup? (Y/N): "
 if /i "%STARTUP%"=="Y" (
-    copy /Y "%INSTALL_DIR%\MicrophoneStatusMonitor.exe" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\" >nul
+    :: Create a shortcut in startup folder instead of copying the exe
+    powershell -Command "$WshShell = New-Object -comObject WScript.Shell; $Shortcut = $WshShell.CreateShortcut('%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Microphone Status Monitor.lnk'); $Shortcut.TargetPath = '%INSTALL_DIR%\MicrophoneStatusMonitor.exe'; $Shortcut.Save()"
     echo Added to startup.
 )
 
@@ -295,7 +296,7 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 
-set "INSTALL_DIR=%ProgramFiles%\MicrophoneStatusMonitor"
+set "INSTALL_DIR=%ProgramData%\AltaML\MicrophoneStatusMonitor"
 
 echo This will uninstall Microphone Status Monitor.
 echo.
@@ -307,7 +308,7 @@ echo Stopping application...
 taskkill /F /IM MicrophoneStatusMonitor.exe >nul 2>&1
 
 :: Remove from startup
-del "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\MicrophoneStatusMonitor.exe" >nul 2>&1
+del "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Microphone Status Monitor.lnk" >nul 2>&1
 
 :: Remove shortcuts
 echo Removing shortcuts...
