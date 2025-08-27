@@ -12,11 +12,11 @@ from pathlib import Path
 
 def create_windows_executable():
     """Create a Windows executable using PyInstaller"""
-    print("🔨 Building Windows Executable...")
+    print("Building Windows Executable...")
     print("=" * 60)
     
     # Install PyInstaller if needed
-    print("📦 Installing PyInstaller...")
+    print("Installing PyInstaller...")
     subprocess.run([sys.executable, "-m", "pip", "install", "pyinstaller"], check=True)
     
     # Create spec file for PyInstaller
@@ -99,10 +99,10 @@ exe = EXE(
         create_icon()
     
     # Build executable
-    print("\n🚀 Building executable with PyInstaller...")
+    print("\nBuilding executable with PyInstaller...")
     subprocess.run([sys.executable, "-m", "PyInstaller", "mic_monitor.spec", "--clean"], check=True)
     
-    print("\n✅ Executable created in: dist/MicrophoneStatusMonitor.exe")
+    print("\nExecutable created in: dist/MicrophoneStatusMonitor.exe")
     return "dist/MicrophoneStatusMonitor.exe"
 
 def create_icon():
@@ -124,13 +124,13 @@ def create_icon():
         
         # Save as ICO
         img.save('mic_icon.ico', format='ICO')
-        print("✅ Created application icon")
+        print("Created application icon")
     except Exception as e:
-        print(f"⚠️ Could not create icon: {e}")
+        print(f"Warning: Could not create icon: {e}")
 
 def create_installer():
     """Create an installer using NSIS or Inno Setup"""
-    print("\n📦 Creating Windows Installer...")
+    print("\nCreating Windows Installer...")
     print("=" * 60)
     
     # Create Inno Setup script (using raw string to avoid unicode escape issues)
@@ -167,7 +167,7 @@ Filename: "{app}\MicrophoneStatusMonitor.exe"; Description: "Launch Microphone S
     with open('installer.iss', 'w') as f:
         f.write(inno_script)
     
-    print("✅ Created Inno Setup script: installer.iss")
+    print("Created Inno Setup script: installer.iss")
     print("\nTo create the installer:")
     print("1. Download Inno Setup from: https://jrsoftware.org/isdl.php")
     print("2. Open installer.iss in Inno Setup")
@@ -250,7 +250,7 @@ pause
     with open('install_windows.bat', 'w') as f:
         f.write(batch_content)
     
-    print("\n✅ Created batch installer: install_windows.bat")
+    print("\nCreated batch installer: install_windows.bat")
 
 def create_uninstaller():
     """Create an uninstaller batch file"""
@@ -304,20 +304,20 @@ pause
     with open('uninstall_windows.bat', 'w') as f:
         f.write(uninstall_content)
     
-    print("✅ Created uninstaller: uninstall_windows.bat")
+    print("Created uninstaller: uninstall_windows.bat")
 
 def main():
     """Main deployment function"""
-    print("🚀 Windows Deployment Tool")
+    print("Windows Deployment Tool")
     print("=" * 60)
     
     # Check if we're on Windows
     if sys.platform != 'win32':
-        print("❌ This script must be run on Windows!")
+        print("ERROR: This script must be run on Windows!")
         sys.exit(1)
     
     # Install dependencies
-    print("\n📦 Installing dependencies...")
+    print("\nInstalling dependencies...")
     subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], check=True)
     subprocess.run([sys.executable, "-m", "pip", "install", "psutil"], check=True)
     
@@ -329,12 +329,12 @@ def main():
     create_uninstaller()
     
     print("\n" + "=" * 60)
-    print("✅ Deployment package created successfully!")
+    print("Deployment package created successfully!")
     print("\nDeployment artifacts:")
-    print(f"  • Executable: {exe_path}")
-    print("  • Batch Installer: install_windows.bat")
-    print("  • Batch Uninstaller: uninstall_windows.bat")
-    print("  • Inno Setup Script: installer.iss")
+    print(f"  - Executable: {exe_path}")
+    print("  - Batch Installer: install_windows.bat")
+    print("  - Batch Uninstaller: uninstall_windows.bat")
+    print("  - Inno Setup Script: installer.iss")
     print("\nNext steps:")
     print("1. Test the executable: dist/MicrophoneStatusMonitor.exe")
     print("2. Run installer as Administrator: install_windows.bat")
