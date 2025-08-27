@@ -215,22 +215,27 @@ if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
 :: Copy files
 echo Copying files...
 
-:: Check if the executable exists in the current directory first
-if exist "MicrophoneStatusMonitor.exe" (
-    copy /Y "MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
-    echo Copied MicrophoneStatusMonitor.exe from current directory
-) else if exist "dist\MicrophoneStatusMonitor.exe" (
-    copy /Y "dist\MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
+:: Get the directory where this batch file is located
+set "SCRIPT_DIR=%~dp0"
+
+:: Check if the executable exists in the script directory first
+if exist "%SCRIPT_DIR%MicrophoneStatusMonitor.exe" (
+    copy /Y "%SCRIPT_DIR%MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
+    echo Copied MicrophoneStatusMonitor.exe from script directory
+) else if exist "%SCRIPT_DIR%dist\MicrophoneStatusMonitor.exe" (
+    copy /Y "%SCRIPT_DIR%dist\MicrophoneStatusMonitor.exe" "%INSTALL_DIR%\" >nul
     echo Copied MicrophoneStatusMonitor.exe from dist directory
 ) else (
     echo ERROR: MicrophoneStatusMonitor.exe not found!
-    echo Please ensure the executable is in the same directory as this installer.
+    echo Checked: %SCRIPT_DIR%MicrophoneStatusMonitor.exe
+    echo Checked: %SCRIPT_DIR%dist\MicrophoneStatusMonitor.exe
+    echo Please ensure the executable is available.
     pause
     exit /b 1
 )
 
-if exist "README.md" (
-    copy /Y "README.md" "%INSTALL_DIR%\" >nul
+if exist "%SCRIPT_DIR%README.md" (
+    copy /Y "%SCRIPT_DIR%README.md" "%INSTALL_DIR%\" >nul
 )
 
 :: Create start menu shortcut
