@@ -104,19 +104,58 @@ jobs:
         name: macos-build
         path: macos/
         
+    - name: List available files for debugging
+      run: |
+        echo "Windows artifacts:"
+        ls -la windows/ || echo "No windows directory"
+        echo "macOS artifacts:"
+        ls -la macos/ || echo "No macos directory"
+        
     - name: Create ZIP archives
       run: |
-        cd windows && zip -r ../MicrophoneStatusMonitor-Windows.zip . && cd ..
-        cd macos && zip -r ../MicrophoneStatusMonitor-macOS.zip . && cd ..
+        # Create Windows ZIP if files exist
+        if [ -d "windows" ] && [ "$(ls -A windows)" ]; then
+          cd windows && zip -r ../MicrophoneStatusMonitor-Windows.zip . && cd ..
+          echo "Created Windows ZIP"
+        else
+          echo "No Windows artifacts to zip"
+        fi
+        
+        # Create macOS ZIP if files exist  
+        if [ -d "macos" ] && [ "$(ls -A macos)" ]; then
+          cd macos && zip -r ../MicrophoneStatusMonitor-macOS.zip . && cd ..
+          echo "Created macOS ZIP"
+        else
+          echo "No macOS artifacts to zip"
+        fi
+        
+    - name: Prepare artifacts for release
+      run: |
+        mkdir -p release-artifacts
+        
+        # Copy Windows artifacts if they exist
+        if [ -f "MicrophoneStatusMonitor-Windows.zip" ]; then
+          cp MicrophoneStatusMonitor-Windows.zip release-artifacts/
+        fi
+        if [ -f "windows/MicrophoneStatusMonitor.exe" ]; then
+          cp windows/MicrophoneStatusMonitor.exe release-artifacts/
+        fi
+        
+        # Copy macOS artifacts if they exist
+        if [ -f "MicrophoneStatusMonitor-macOS.zip" ]; then
+          cp MicrophoneStatusMonitor-macOS.zip release-artifacts/
+        fi
+        if [ -f "macos/MicrophoneStatusMonitor.dmg" ]; then
+          cp macos/MicrophoneStatusMonitor.dmg release-artifacts/
+        fi
+        
+        echo "Release artifacts:"
+        ls -la release-artifacts/
         
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: |
-          MicrophoneStatusMonitor-Windows.zip
-          MicrophoneStatusMonitor-macOS.zip
-          windows/MicrophoneStatusMonitor.exe
-          macos/MicrophoneStatusMonitor.dmg
+        artifacts: "release-artifacts/*"
         body: |
           ## 🎤 Microphone Status Monitor - Release ${{ github.ref_name }}
           
